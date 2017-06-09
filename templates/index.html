@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		{{ template "head.html" }}
+	</head>
+	<body>
+		{{ template "header.html" }}
+		<div class="container">
+			<div class="jumbotron">
+				<p>This site is for paying the Association for Computing Machinery at the University of Minnesota, Twin-Cities, for anything you owe us money for.</p>
+			</div>
+			<div class="jumbotron">
+				<div class="form-group" id="amount-group">
+					<input class="form-control" id="amount" placeholder="Amount (USD)">
+				</div>
+				<button class="btn btn-primary" disabled id="pay" type="submit">Pay ACM UMN</button>
+			</div>
+		</div>
+		{{ template "footer.html" }}
+	</body>
+</html>
+
