@@ -15,7 +15,7 @@ $(() => {
 
 	function onAmountChange() {
 		const value = $("#amount").val();
-		if(value.match(/^[0-9]+(\.[0-9]{2})$/)) {
+		if(value.match(/^[0-9]+(\.[0-9]{2})?$/)) {
 			amount = parseInt(value.replace(".", ""));
 
 			$("#amount-group").addClass("has-success");
