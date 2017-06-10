@@ -31,13 +31,10 @@ func main() {
 	// Create the router.
 	r := gin.New()
 	r.Use(gin.Logger())
-	r.LoadHTMLGlob("templates/*")
-	r.Static("static", "static")
 
 	// Connect callbacks.
-	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
+	r.StaticFile("/", "static/index.html")
+	r.StaticFile("/static/main.js", "static/main.js")
 	r.POST("/", pay)
 
 	// Serve.

@@ -64,6 +64,9 @@ $(() => {
 		};
 		fetch("/", {
 			body: JSON.stringify(body),
+			headers: new Headers({
+				"Content-Type": "application/json",
+			}),
 			method: "POST"
 		}).then(res => {
 			return res.json().then(body => {

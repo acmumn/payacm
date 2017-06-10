@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/css/bootstrap-material-design.min.css"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.10/URI.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://checkout.stripe.com/checkout.js"></script>
+		<script src="/static/main.js"></script>
+		<title>Pay ACM UMN</title>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">payacmumn</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+				</div>
+			</div>
+		</nav>
+		<main class="container">
+			<div class="jumbotron">
+				<p>This site is for paying the Association for Computing Machinery at the University of Minnesota, Twin-Cities, for anything you owe us money for.</p>
+			</div>
+			<div class="jumbotron" id="pay-form">
+				<div class="form-group" id="amount-group">
+					<input class="form-control" id="amount" placeholder="Amount (USD)">
+				</div>
+				<div class="form-group" id="reason-group">
+					<input class="form-control" id="reason" placeholder="Why are you giving us money? (Optional)">
+				</div>
+				<button class="btn btn-primary" disabled id="pay" type="submit">Pay ACM UMN</button>
+			</div>
+		</main>
+	</body>
+</html>
+
