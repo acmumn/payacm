@@ -66,23 +66,49 @@ $(() => {
 			body: JSON.stringify(body),
 			method: "POST"
 		}).then(res => {
-			return res.json().then(json => {
-				if(res.ok)
-					return json;
-				else
-					throw { code: res.status + " " + res.statusText, contents: json };
+			return res.json().then(body => {
+				if(res.ok) {
+					return body;
+				} else {
+					throw {
+						contents: body,
+						status: res.status,
+					};
+				}
 			});
 		}).then(res => {
-			alert("Success!");
+			addCard()
+				.append($("<h2>").text("Succeeded"))
+				.append($("<p>").text("Charge succeeded. Check your email inbox for a receipt."));
 		}).catch(err => {
+			const body = $("<p>");
+			if(err.status === 503) {
+				body.append("The transaction did ");
+				body.append($("<span>").addClass("bold").text("not"));
+				body.append(" complete successfully; your card should not");
+				body.append(" have been charged. If this is not true,");
+				body.append(" contact ");
+				body.append($("<a>").attr("href", "mailto:acm@umn.edu").text("acm@umn.edu"))
+				body.append(".");
+			} else if(err.status === 502) {
+				body.append("The transaction may have completed successfully,");
+				body.append(" but an email could not be sent. Send an email to ");
+				body.append($("<a>").attr("href", "mailto:acm@umn.edu").text("acm@umn.edu"))
+				body.append(" with the details of the transaction and the");
+				body.append(" below error.");
+			} else {
+				body.append("Contact ")
+				body.append($("<a>").attr("href", "mailto:acm@umn.edu").text("acm@umn.edu"))
+				body.append(" with the details of this error.");
+			}
+
 			addCard()
 				.append($("<h2>")
 					.addClass("text-danger")
 					.text("An Error Occurred"))
-				.append($("<p>")
-					.html("Contact <a href='mailto:acm@umn.edu'>acm@umn.edu</a> with the details of this error."))
+				.append(body)
 				.append($("<pre>")
-					.append($("<code>").text(JSON.stringify(err, null, "\t"))));
+					.append($("<code>").text(JSON.stringify(err, null, "    "))));
 			console.error(err);
 		});
 	}

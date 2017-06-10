@@ -45,6 +45,12 @@
 			"revisionTime": "2017-04-07T21:35:18Z"
 		},
 		{
+			"checksumSHA1": "A3VQHd0br/oViLQUV1zf2TMTiHY=",
+			"path": "github.com/stripe/stripe-go/charge",
+			"revision": "c4fbb41e6d772a7571bdc31eea0d4de7c2450ee4",
+			"revisionTime": "2017-04-07T21:35:18Z"
+		},
+		{
 			"checksumSHA1": "y5AD80EvDutFqGuAYsBtcya6ntM=",
 			"path": "github.com/stripe/stripe-go/orderitem",
 			"revision": "c4fbb41e6d772a7571bdc31eea0d4de7c2450ee4",

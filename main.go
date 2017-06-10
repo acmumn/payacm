@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -35,17 +34,4 @@ func main() {
 	if err := http.ListenAndServe(":"+port, r); err != nil {
 		log.Fatal(err)
 	}
-}
-
-type Payment struct {
-	amount uint   `binding:"required"`
-	email  string `binding:"required"`
-	token  string `binding:"required"`
-}
-
-func pay(c *gin.Context) {
-	var payment Payment
-	c.BindJSON(&payment)
-	fmt.Println(payment)
-	c.JSON(http.StatusNotImplemented, nil)
 }
