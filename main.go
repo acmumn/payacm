@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,28 +11,45 @@ import (
 )
 
 func main() {
+	// Get port to serve on.
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Println("Using default port of 3000")
 		port = "3000"
 	}
 
-	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
-	if stripe.Key == "" {
-		log.Fatal("Did not provide STRIPE_SECRET_KEY")
-	}
+	// Get the stripe key.
+	stripe.Key = getenv("STRIPE_SECRET_KEY")
 
+	// Fail out early if mailer variables are not defined.
+	getenv("SMTP_FROM")
+	getenv("SMTP_HOST")
+	getenv("SMTP_PASS")
+	getenv("SMTP_PORT")
+	getenv("SMTP_USER")
+
+	// Create the router.
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.LoadHTMLGlob("templates/*")
 	r.Static("static", "static")
 
+	// Connect callbacks.
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
 	r.POST("/", pay)
 
+	// Serve.
 	if err := http.ListenAndServe(":"+port, r); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getenv(key string) string {
+	val := os.Getenv(key)
+	if val == "" {
+		log.Fatal(fmt.Sprintf("Did not provide %s", key))
+	}
+	return val
 }

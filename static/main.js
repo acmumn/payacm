@@ -84,7 +84,7 @@ $(() => {
 			const body = $("<p>");
 			if(err.status === 503) {
 				body.append("The transaction did ");
-				body.append($("<span>").addClass("bold").text("not"));
+				body.append($("<strong>").text("not"));
 				body.append(" complete successfully; your card should not");
 				body.append(" have been charged. If this is not true,");
 				body.append(" contact ");
