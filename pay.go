@@ -18,13 +18,11 @@ type Payment struct {
 
 func pay(c *gin.Context) {
 	var payment Payment
-	log.Println("a", payment)
 	if err := c.BindJSON(&payment); err != nil {
-		log.Println(err)
+		log.Println("Error binding in payment", err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	log.Println("b", payment)
 
 	if payment.Amount <= 0 || payment.Email == "" || payment.Reason == "" || payment.Token == "" {
 		c.JSON(http.StatusBadRequest, payment)
@@ -40,14 +38,14 @@ func pay(c *gin.Context) {
 
 	_, err := charge.New(chargeParams)
 	if err != nil {
-		log.Println(err)
+		log.Println("Error charging card", err)
 		c.JSON(http.StatusServiceUnavailable, err)
 		return
 	}
 
 	err = mail(payment)
 	if err != nil {
-		log.Println(err)
+		log.Println("Error sending mail", err)
 		c.JSON(http.StatusBadGateway, err)
 		return
 	}
