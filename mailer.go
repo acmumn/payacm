@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/smtp"
 )
@@ -50,8 +51,8 @@ func mail(payment Payment) error {
 	defer w.Close()
 
 	// Write the mail headers.
-	ioutil.WriteString(w, fmt.Sprintf("To: %s\n", payment.Email))
-	ioutil.WriteString(w, "Receipt from payacmumn")
+	io.WriteString(w, fmt.Sprintf("To: %s\n", payment.Email))
+	io.WriteString(w, "Receipt from payacmumn")
 
 	// Render the request body and return.
 	return mail_template.Execute(w, payment)
