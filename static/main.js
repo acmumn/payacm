@@ -87,7 +87,7 @@ $(() => {
 				.append($("<div>").html(res));
 		}).catch(err => {
 			const body = $("<p>");
-			if(err.status === 503) {
+			if(err.status === 502) {
 				body.append("The transaction did ");
 				body.append($("<strong>").text("not"));
 				body.append(" complete successfully; your card should not");
@@ -95,7 +95,7 @@ $(() => {
 				body.append(" contact ");
 				body.append($("<a>").attr("href", "mailto:acm@umn.edu").text("acm@umn.edu"))
 				body.append(".");
-			} else if(err.status === 502) {
+			} else if(err.status === 504) {
 				body.append("The transaction may have completed successfully,");
 				body.append(" but an email could not be sent. Send an email to ");
 				body.append($("<a>").attr("href", "mailto:acm@umn.edu").text("acm@umn.edu"))

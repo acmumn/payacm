@@ -36,19 +36,17 @@ func pay(c *gin.Context) {
 	}
 	chargeParams.SetSource(payment.Token)
 
-	_, err := charge.New(chargeParams)
-	if err != nil {
+	if _, err := charge.New(chargeParams); err != nil {
 		log.Println("Error charging card", err)
-		c.JSON(http.StatusServiceUnavailable, err)
-		return
-	}
-
-	err = mail(payment)
-	if err != nil {
-		log.Println("Error sending mail", err)
 		c.JSON(http.StatusBadGateway, err)
 		return
 	}
 
-	mail_template.Execute(c.Writer, payment)
+	if err := mail(payment); err != nil {
+		log.Println("Error sending mail", err)
+		c.JSON(http.StatusServiceUnavailable, err)
+		return
+	}
+
+	mail_template_html.Execute(c.Writer, payment)
 }

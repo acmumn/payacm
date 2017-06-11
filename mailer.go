@@ -1,70 +1,59 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
-	"html/template"
-	"io"
-	"log"
+	html "html/template"
 	"net/smtp"
+	text "text/template"
+
+	"github.com/domodwyer/mailyak"
 )
 
-const MAIL_FILE = "mail_template.html"
-const MAIL_TEMPLATE = `
+const MAIL_TEMPLATE_NAME = "mail_template"
+const MAIL_TEMPLATE_HTML = `
 <p>This receipt confirms payment of {{.Amount | asMoney}} from <a href="{{.Email}}">{{.Email}}</a> for {{.Reason}}.</p>
 
 <p>If this information is incorrect, please email <a href="mailto:acm@umn.edu">acm@umn.edu</a> immediately.</p>
 `
+const MAIL_TEMPLATE_TEXT = `
+This receipt confirms payment of {{.Amount | asMoney}} from {{.Email}} for {{.Reason}}.
 
-var mail_template = template.Must(template.New(MAIL_FILE).Funcs(template.FuncMap{
+If this information is incorrect, please email acm@umn.edu immediately.
+`
+
+var mail_template_html = html.Must(html.New(MAIL_TEMPLATE_NAME).Funcs(html.FuncMap{
 	"asMoney": func(cents uint64) string {
 		return fmt.Sprintf("$%.2f", float64(cents)/100)
 	},
-}).Parse(MAIL_TEMPLATE))
+}).Parse(MAIL_TEMPLATE_HTML))
+var mail_template_text = text.Must(text.New(MAIL_TEMPLATE_NAME).Funcs(text.FuncMap{
+	"asMoney": func(cents uint64) string {
+		return fmt.Sprintf("$%.2f", float64(cents)/100)
+	},
+}).Parse(MAIL_TEMPLATE_TEXT))
 
 func mail(payment Payment) error {
 	// Open a connection to the server.
-	conn, err := smtp.Dial(fmt.Sprintf("%s:%s",
-		getenv("SMTP_HOST"),
-		getenv("SMTP_PORT")))
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
-
-	// (Possibly) start encryption.
-	if ok, params := conn.Extension("STARTTLS"); ok {
-		log.Println("STARTTLS supported with params", params)
-		conn.StartTLS(&tls.Config{
-			ServerName: getenv("SMTP_HOST"),
-		})
-	}
-
-	// Authenticate to the server.
-	err = conn.Auth(smtp.PlainAuth("",
+	server := fmt.Sprintf("%s:%s", getenv("SMTP_HOST"), getenv("SMTP_PORT"))
+	mail := mailyak.New(server, smtp.PlainAuth("",
 		getenv("SMTP_USER"),
 		getenv("SMTP_PASS"),
 		getenv("SMTP_HOST")))
-	if err != nil {
-		return err
-	}
 
 	// Set up the mail headers.
-	conn.Mail(getenv("SMTP_FROM"))
-	conn.Rcpt(payment.Email)
-	conn.Rcpt("acm@umn.edu")
+	mail.From(getenv("SMTP_FROM"))
+	mail.FromName("payacmumn")
+	mail.To(payment.Email)
+	mail.Bcc("acm@umn.edu")
+	mail.ReplyTo("acm@umn.edu")
+	mail.Subject("Receipt from payacmumn")
 
-	// Create the request body.
-	w, err := conn.Data()
-	if err != nil {
+	// Render the mail body and return.
+	if err := mail_template_html.Execute(mail.HTML(), payment); err != nil {
 		return err
 	}
-	defer w.Close()
-
-	// Write the mail headers.
-	io.WriteString(w, fmt.Sprintf("To: %s\n", payment.Email))
-	io.WriteString(w, "Receipt from payacmumn")
-
-	// Render the request body and return.
-	return mail_template.Execute(w, payment)
+	if err := mail_template_text.Execute(mail.Plain(), payment); err != nil {
+		return err
+	}
+	return mail.Send()
 }
