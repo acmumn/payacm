@@ -46,7 +46,7 @@ $(() => {
 			return res.json();
 		}).then(key => {
 			const handler = StripeCheckout.configure({
-	   			key: "pk_test_Mxl12rTX2BQpuAVWg6eEElFp",
+	   			key: key,
 				locale: "auto",
 				token: onSubmit,
 			});
