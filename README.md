@@ -7,11 +7,19 @@ arbitrary amounts of money from people, emailing them afterwards.
 
 ## Configuration
 
-Adjust the API key in `static/main.js` and the secret key in the
-`STRIPE_SECRET_KEY` environment variable.
-
 Runs on the port specified in the `PORT` environment variable, or on port 3000
 by default.
+
+Uses the Stripe public key in the `STRIPE_PUBLIC_KEY` environment variable and
+the secret key in the `STRIPE_SECRET_KEY` environment variable.
+
+Sends mail using the SMTP server stored in the `SMTP_HOST` and `SMTP_PORT`
+environment variables, from the email specified in the `SMTP_FROM` environment
+variable, authenticating with the username and password in the `SMTP_USER` and
+`SMTP_PASS` environment variables, respectively.
+
+If the application is running in a production environment, it is recommended to
+also set the `GIN_MODE` environment variable to `release`.
 
 ## Developing
 
