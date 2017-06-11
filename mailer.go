@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"html/template"
+	"log"
 	"net/smtp"
 )
 
@@ -17,6 +19,14 @@ func mail(payment Payment) error {
 		return err
 	}
 	defer conn.Close()
+
+	// (Possibly) start encryption.
+	if ok, params := conn.Extension("STARTTLS"); ok {
+		log.Println("STARTTLS supported with params", params)
+		conn.StartTLS(&tls.Config{
+			ServerName: getenv("SMTP_HOST"),
+		})
+	}
 
 	// Authenticate to the server.
 	err = conn.Auth(smtp.PlainAuth("",
