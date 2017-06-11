@@ -21,7 +21,8 @@ func main() {
 	// Get the stripe key.
 	stripe.Key = getenv("STRIPE_SECRET_KEY")
 
-	// Fail out early if mailer variables are not defined.
+	// Fail out early if other variables are not defined.
+	getenv("STRIPE_PUBLIC_KEY")
 	getenv("SMTP_FROM")
 	getenv("SMTP_HOST")
 	getenv("SMTP_PASS")
@@ -34,8 +35,11 @@ func main() {
 
 	// Connect callbacks.
 	r.StaticFile("/", "static/index.html")
-	r.StaticFile("/static/main.js", "static/main.js")
 	r.POST("/", pay)
+	r.StaticFile("/static/main.js", "static/main.js")
+	r.GET("/stripeKey.json", func(c *gin.Context) {
+		c.JSON(http.StatusOK, getenv("STRIPE_PUBLIC_KEY"))
+	})
 
 	// Serve.
 	if err := http.ListenAndServe(":"+port, r); err != nil {

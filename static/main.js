@@ -1,10 +1,5 @@
 $(() => {
 	let amount = 0;
-	const handler = StripeCheckout.configure({
-	   	key: "pk_test_Mxl12rTX2BQpuAVWg6eEElFp",
-		locale: "auto",
-		token: onSubmit,
-	});
 
 	$("#amount").on("input", onAmountChange);
 	$("#pay").click(onPay);
@@ -47,10 +42,32 @@ $(() => {
 		}
 	}
 	function onPay(e) {
-		handler.open({
-			name: "ACM UMN",
-			description: getReason() || "payacmumn",
-			amount: amount,
+		fetch("/stripeKey.json").then(res => {
+			return res.json();
+		}).then(key => {
+			const handler = StripeCheckout.configure({
+	   			key: "pk_test_Mxl12rTX2BQpuAVWg6eEElFp",
+				locale: "auto",
+				token: onSubmit,
+			});
+			handler.open({
+				name: "ACM UMN",
+				description: getReason() || "payacmumn",
+				amount: amount,
+			});
+		}).catch(err => {
+			const body = $("<p>")
+				.append("Contact ")
+				.append($("<a>").attr("href", "mailto:acm@umn.edu").text("acm@umn.edu"))
+				.append(" with the details of this error.");
+			addCard()
+				.append($("<h2>")
+					.addClass("text-danger")
+					.text("An Error Occurred"))
+				.append(body)
+				.append($("<pre>")
+					.append($("<code>").text(JSON.stringify(err, null, "    "))));
+			console.error(err);
 		});
 		e.preventDefault();
 	}
