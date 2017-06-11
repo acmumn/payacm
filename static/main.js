@@ -69,7 +69,7 @@ $(() => {
 			}),
 			method: "POST"
 		}).then(res => {
-			return res.json().then(body => {
+			return res.text().then(body => {
 				if(res.ok) {
 					return body;
 				} else {
@@ -82,7 +82,9 @@ $(() => {
 		}).then(res => {
 			addCard()
 				.append($("<h2>").text("Succeeded"))
-				.append($("<p>").text("Charge succeeded. Check your email inbox for a receipt."));
+				.append($("<p>").text("Charge succeeded. Check your email inbox for a receipt."))
+				.append($("<hr>"))
+				.append($("<div>").html(res));
 		}).catch(err => {
 			const body = $("<p>");
 			if(err.status === 503) {

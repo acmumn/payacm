@@ -9,7 +9,18 @@ import (
 	"net/smtp"
 )
 
-var mail_template = template.Must(template.ParseFiles("templates/mail.html"))
+const MAIL_FILE = "mail_template.html"
+const MAIL_TEMPLATE = `
+<p>This receipt confirms payment of {{.Amount | asMoney}} from <a href="{{.Email}}">{{.Email}}</a> for {{.Reason}}.</p>
+
+<p>If this information is incorrect, please email <a href="mailto:acm@umn.edu">acm@umn.edu</a> immediately.</p>
+`
+
+var mail_template = template.Must(template.New(MAIL_FILE).Funcs(template.FuncMap{
+	"asMoney": func(cents uint64) string {
+		return fmt.Sprintf("$%.2f", float64(cents)/100)
+	},
+}).Parse(MAIL_TEMPLATE))
 
 func mail(payment Payment) error {
 	// Open a connection to the server.

@@ -50,5 +50,5 @@ func pay(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, payment)
+	mail_template.Execute(c.Writer, payment)
 }
