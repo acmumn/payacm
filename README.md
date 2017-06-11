@@ -1,5 +1,7 @@
 # payacm
 
+[![Build Status](https://travis-ci.org/acmumn/payacm.svg?branch=master)](https://travis-ci.org/acmumn/payacm)
+
 A simple API service to accept payment. This site uses Stripe to collect
 arbitrary amounts of money from people, emailing them afterwards.
 
