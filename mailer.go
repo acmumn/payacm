@@ -11,12 +11,12 @@ import (
 
 const MAIL_TEMPLATE_NAME = "mail_template"
 const MAIL_TEMPLATE_HTML = `
-<p>This receipt confirms payment of {{.Amount | asMoney}} from <a href="{{.Email}}">{{.Email}}</a> for {{.Reason}}.</p>
+<p>This receipt confirms payment of {{.Amount | asMoney}} from <a href="{{.Email}}">{{.Email}}</a> for "{{.Reason}}".</p>
 
 <p>If this information is incorrect, please email <a href="mailto:acm@umn.edu">acm@umn.edu</a> immediately.</p>
 `
 const MAIL_TEMPLATE_TEXT = `
-This receipt confirms payment of {{.Amount | asMoney}} from {{.Email}} for {{.Reason}}.
+This receipt confirms payment of {{.Amount | asMoney}} from {{.Email}} for "{{.Reason}}".
 
 If this information is incorrect, please email acm@umn.edu immediately.
 `
