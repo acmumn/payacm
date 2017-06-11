@@ -49,6 +49,10 @@ func mail(payment Payment) error {
 	}
 	defer w.Close()
 
+	// Write the mail headers.
+	ioutil.WriteString(w, fmt.Sprintf("To: %s\n", payment.Email))
+	ioutil.WriteString(w, "Receipt from payacmumn")
+
 	// Render the request body and return.
 	return mail_template.Execute(w, payment)
 }
