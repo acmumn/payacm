@@ -10,10 +10,10 @@ import (
 )
 
 type Payment struct {
-	amount uint64 `binding:"required"`
-	email  string `binding:"required"`
-	reason string `binding:"required"`
-	token  string `binding:"required"`
+	Amount uint64 `binding:"required" json:"amount"`
+	Email  string `binding:"required" json:"email"`
+	Reason string `binding:"required" json:"reason"`
+	Token  string `binding:"required" json:"token"`
 }
 
 func pay(c *gin.Context) {
@@ -26,17 +26,17 @@ func pay(c *gin.Context) {
 	}
 	log.Println("b", payment)
 
-	if payment.amount <= 0 || payment.email == "" || payment.reason == "" || payment.token == "" {
+	if payment.Amount <= 0 || payment.Email == "" || payment.Reason == "" || payment.Token == "" {
 		c.JSON(http.StatusBadRequest, payment)
 		return
 	}
 
 	chargeParams := &stripe.ChargeParams{
-		Amount:   payment.amount,
+		Amount:   payment.Amount,
 		Currency: "usd",
-		Desc:     payment.reason,
+		Desc:     payment.Reason,
 	}
-	chargeParams.SetSource(payment.token)
+	chargeParams.SetSource(payment.Token)
 
 	_, err := charge.New(chargeParams)
 	if err != nil {

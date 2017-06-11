@@ -29,7 +29,7 @@ func mail(payment Payment) error {
 
 	// Set up the mail headers.
 	conn.Mail(getenv("SMTP_FROM"))
-	conn.Rcpt(payment.email)
+	conn.Rcpt(payment.Email)
 	conn.Rcpt("acm@umn.edu")
 
 	// Create the request body.
