@@ -33,7 +33,7 @@ func pay(c *gin.Context) {
 	chargeParams := &stripe.ChargeParams{
 		Amount:   payment.Amount,
 		Currency: "usd",
-		Desc:     fmt.Sprintf(`"%s" from "%s"`, payment.Reason, payment.Email),
+		Desc:     fmt.Sprintf(`payacmumn: "%s" from "%s"`, payment.Reason, payment.Email),
 	}
 	chargeParams.SetSource(payment.Token)
 
