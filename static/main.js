@@ -32,10 +32,22 @@ $(() => {
 			if(value.match(/^[0-9]+$/))
 				amount *= 100;
 
-			$("#amount-group").addClass("has-success");
-			$("#amount-group").removeClass("has-error");
-			$("#pay").attr("disabled", false);
+			if(amount < 1000) {
+				$("#amount-error").show().text("payacm can only handle trans" +
+					"actions of at least $10.00. Give an officer cash in per" +
+					"son for any lesser amount.");
+				$("#amount-group").addClass("has-error");
+				$("#amount-group").removeClass("has-success");
+				$("#pay").attr("disabled", true);
+			} else {
+				$("#amount-error").hide();
+				$("#amount-group").addClass("has-success");
+				$("#amount-group").removeClass("has-error");
+				$("#pay").attr("disabled", false);
+			}
 		} else {
+			$("#amount-error").show().text("Invalid amount. Please use eithe" +
+				"r an integer number of dollars, or DOLLARS.CENTS notation.");
 			$("#amount-group").addClass("has-error");
 			$("#amount-group").removeClass("has-success");
 			$("#pay").attr("disabled", true);
