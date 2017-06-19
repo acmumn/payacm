@@ -25,7 +25,7 @@ func pay(c *gin.Context) {
 		return
 	}
 
-	if payment.Amount <= 0 || payment.Email == "" || payment.Reason == "" || payment.Token == "" {
+	if payment.Amount <= 1000 || payment.Email == "" || payment.Reason == "" || payment.Token == "" {
 		c.JSON(http.StatusBadRequest, payment)
 		return
 	}
