@@ -13,7 +13,7 @@ import (
 type Payment struct {
 	Amount uint64 `binding:"required" json:"amount"`
 	Email  string `binding:"required" json:"email"`
-	Reason string `binding:"required" json:"reason"`
+	Reason string `json:"reason"`
 	Token  string `binding:"required" json:"token"`
 }
 
